@@ -8,7 +8,7 @@
 		<version>2.7.8</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>br.etec.com.lucas</groupId>
+	<groupId>br.com.etec.lucas</groupId>
 	<artifactId>exercicio-pw2</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>exercicio-pw2</name>
