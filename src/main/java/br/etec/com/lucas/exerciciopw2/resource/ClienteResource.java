@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping("cliente")
+@RequestMapping("clientes")
 public class ClienteResource {
     @Autowired
     public ClienteRepository clienteRepository;

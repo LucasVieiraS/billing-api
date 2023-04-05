@@ -2,21 +2,20 @@ package br.etec.com.lucas.exerciciopw2.model;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.Objects;
 
 @Entity
-@Table(name="contasPagar")
+@Table(name="contaspagar")
 public class ContasPagar {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private Date data;
-
-    private Date dataVencimento;
-
+    private LocalDate data;
+    private LocalDate datavencimento;
     private BigDecimal valor;
 
     @ManyToOne
@@ -24,43 +23,43 @@ public class ContasPagar {
     private Cliente cliente;
 
     public Long getId() {
-        return id;
+      return id;
     }
 
     public void setId(Long id) {
-        this.id = id;
+      this.id = id;
     }
 
-    public Date getData() {
-        return data;
+    public LocalDate getData() {
+      return data;
     }
 
-    public void setData(Date data) {
-        this.data = data;
+    public void setData(LocalDate data) {
+      this.data = data;
     }
 
-    public Date getDataVencimento() {
-        return dataVencimento;
+    public LocalDate getDatavencimento() {
+      return datavencimento;
     }
 
-    public void setDataVencimento(Date dataVencimento) {
-        this.dataVencimento = dataVencimento;
+    public void setDatavencimento(LocalDate datavencimento) {
+      this.datavencimento = datavencimento;
     }
 
     public BigDecimal getValor() {
-        return valor;
+      return valor;
     }
 
     public void setValor(BigDecimal valor) {
-        this.valor = valor;
+      this.valor = valor;
     }
 
     public Cliente getCliente() {
-        return cliente;
+      return cliente;
     }
 
     public void setCliente(Cliente cliente) {
-        this.cliente = cliente;
+      this.cliente = cliente;
     }
 
     @Override
