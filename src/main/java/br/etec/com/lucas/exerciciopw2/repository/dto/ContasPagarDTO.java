@@ -7,9 +7,14 @@ public class ContasPagarDTO {
   private Long id;
   private String nomecliente;
 
-  public ContasPagarDTO(Long id, String nomecliente) {
+  private LocalDate datavencimento;
+  private LocalDate data;
+
+  public ContasPagarDTO(Long id, String nomecliente, LocalDate datavencimento, LocalDate data) {
     this.id = id;
     this.nomecliente = nomecliente;
+    this.datavencimento = datavencimento;
+    this.data = data;
   }
 
   public Long getId() {

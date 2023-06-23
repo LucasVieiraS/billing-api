@@ -12,10 +12,8 @@ import org.springframework.data.domain.Pageable;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
+import javax.persistence.criteria.*;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,8 +29,10 @@ public class ContasPagarRepositoryImpl implements ContasPagarRepositoryQuery {
 
     criteria.select(builder.construct(ContasPagarDTO.class,
       root.get("id"),
-      root.get("cliente").get("nome")
-    ));
+      root.get("cliente").get("nome"),
+      root.get("datavencimento"),
+      root.get("data")
+      ));
 
     Predicate[] predicates = createRestrictions(contasPagarFilter, builder, root);
     criteria.where(predicates);
@@ -47,35 +47,58 @@ public class ContasPagarRepositoryImpl implements ContasPagarRepositoryQuery {
   private Predicate[] createRestrictions(ContasPagarFilter contasPagarFilter, CriteriaBuilder builder, Root<ContasPagar> root) {
     List<Predicate> predicates = new ArrayList<>();
 
-    if (!StringUtils.isEmpty(contasPagarFilter.getNomecliente())) {
-      System.out.println(root.get("cliente").get("nome"));
+    Path<String> clienteNome = root.get("cliente").get("nome");
+    String nomeCliente = contasPagarFilter.getNomecliente();
+
+    if (!StringUtils.isEmpty(nomeCliente)) {
       predicates.add(
         builder.like(
-          builder.lower(root.get("cliente").get("nome")),
-          "%" + contasPagarFilter.getNomecliente().toLowerCase() + '%'
+          builder.lower(clienteNome),
+          "%" + nomeCliente.toLowerCase() + '%'
         )
       );
     }
 
-    /*
-    if (!StringUtils.isEmpty(contasPagarFilter.getData().toString())) {
+    if (contasPagarFilter.getData() != null) {
       predicates.add(
-        builder.like(
-          builder.lower(root.get("data")),
-          "%" + contasPagarFilter.getData().toString().toLowerCase() + '%'
+        builder.equal(
+          root.get("data"),
+          contasPagarFilter.getData()
         )
       );
     }
 
-    if (!StringUtils.isEmpty(contasPagarFilter.getDatavencimento().toString())) {
+    if (contasPagarFilter.getDatavencimento() != null) {
       predicates.add(
-        builder.like(
-          builder.lower(root.get("datavencimento")),
-          "%" + contasPagarFilter.getDatavencimento().toString().toLowerCase() + '%'
+        builder.equal(
+          root.get("datavencimento"),
+          contasPagarFilter.getDatavencimento()
         )
       );
     }
-    * */
+
+    if (contasPagarFilter.getDatavencimentoantes() != null && contasPagarFilter.getDatavencimento() != null) {
+      predicates.add(
+        builder.between(
+          root.get("datavencimento"),
+          contasPagarFilter.getDatavencimentoantes(),
+          contasPagarFilter.getDatavencimentodepois()
+          )
+      );
+    } else if (contasPagarFilter.getDatavencimentoantes() != null)  {
+        builder.between(
+          root.get("datavencimento"),
+          contasPagarFilter.getDatavencimentoantes(),
+          LocalDate.now()
+          );
+    } else if (contasPagarFilter.getDatavencimentodepois() != null) {
+      builder.between(
+        root.get("datavencimento"),
+        LocalDate.now()
+        contasPagarFilter.getDatavencimentodepois()
+      );
+    }
+
 
     return predicates.toArray((new Predicate[predicates.size()]));
   }
