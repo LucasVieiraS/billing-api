@@ -27,12 +27,15 @@ public class ContasPagarRepositoryImpl implements ContasPagarRepositoryQuery {
     CriteriaQuery<ContasPagarDTO> criteria = builder.createQuery(ContasPagarDTO.class);
     Root<ContasPagar> root = criteria.from(ContasPagar.class);
 
-    criteria.select(builder.construct(ContasPagarDTO.class,
-      root.get("id"),
-      root.get("cliente").get("nome"),
-      root.get("datavencimento"),
-      root.get("data")
-      ));
+    criteria.select(
+            builder.construct(ContasPagarDTO.class,
+                    root.get("id"),
+                    root.get("cliente").get("nome"),
+                    root.get("datavencimento"),
+                    root.get("datacriacao"),
+                    root.get("valor")
+            )
+    );
 
     Predicate[] predicates = createRestrictions(contasPagarFilter, builder, root);
     criteria.where(predicates);
@@ -59,11 +62,20 @@ public class ContasPagarRepositoryImpl implements ContasPagarRepositoryQuery {
       );
     }
 
-    if (contasPagarFilter.getData() != null) {
+    if (contasPagarFilter.getValor() != null) {
+      predicates.add(
+              builder.lessThanOrEqualTo(
+                      root.get("valor"),
+                      contasPagarFilter.getValor()
+              )
+      );
+    }
+
+    if (contasPagarFilter.getDatacriacao() != null) {
       predicates.add(
         builder.equal(
-          root.get("data"),
-          contasPagarFilter.getData()
+          root.get("datacriacao"),
+          contasPagarFilter.getDatacriacao()
         )
       );
     }
@@ -76,29 +88,6 @@ public class ContasPagarRepositoryImpl implements ContasPagarRepositoryQuery {
         )
       );
     }
-
-    if (contasPagarFilter.getDatavencimentoantes() != null && contasPagarFilter.getDatavencimento() != null) {
-      predicates.add(
-        builder.between(
-          root.get("datavencimento"),
-          contasPagarFilter.getDatavencimentoantes(),
-          contasPagarFilter.getDatavencimentodepois()
-          )
-      );
-    } else if (contasPagarFilter.getDatavencimentoantes() != null)  {
-        builder.between(
-          root.get("datavencimento"),
-          contasPagarFilter.getDatavencimentoantes(),
-          LocalDate.now()
-          );
-    } else if (contasPagarFilter.getDatavencimentodepois() != null) {
-      builder.between(
-        root.get("datavencimento"),
-        LocalDate.now()
-        contasPagarFilter.getDatavencimentodepois()
-      );
-    }
-
 
     return predicates.toArray((new Predicate[predicates.size()]));
   }

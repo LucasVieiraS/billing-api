@@ -1,35 +1,24 @@
 package br.etec.com.lucas.exerciciopw2.repository.dto;
 
+import lombok.*;
+
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
+@Getter
+@Setter
 public class ContasPagarDTO {
-  private Long id;
+  @NonNull private Long id;
   private String nomecliente;
-
   private LocalDate datavencimento;
-  private LocalDate data;
+  private LocalDate datacriacao;
+  @NonNull private BigDecimal valor;
 
-  public ContasPagarDTO(Long id, String nomecliente, LocalDate datavencimento, LocalDate data) {
+  public ContasPagarDTO(@NonNull Long id, String nomecliente, LocalDate datavencimento, LocalDate datacriacao, @NonNull BigDecimal valor) {
     this.id = id;
     this.nomecliente = nomecliente;
     this.datavencimento = datavencimento;
-    this.data = data;
-  }
-
-  public Long getId() {
-    return id;
-  }
-
-  public void setId(Long id) {
-    this.id = id;
-  }
-
-  public String getNomecliente() {
-    return nomecliente;
-  }
-
-  public void setNomecliente(String nomecliente) {
-    this.nomecliente = nomecliente;
+    this.datacriacao = datacriacao;
+    this.valor = valor;
   }
 }

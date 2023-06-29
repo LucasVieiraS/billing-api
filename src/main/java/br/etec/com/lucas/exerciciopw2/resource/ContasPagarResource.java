@@ -18,13 +18,13 @@ public class ContasPagarResource {
     @Autowired
     public ContasPagarRepository contasPagarRepository;
 
-    @RequestMapping("/todos")
-    public List<ContasPagar> listarTodasContasPagar() {
+    @GetMapping("/todos")
+    public List<ContasPagar> listAllContasPagar() {
         return contasPagarRepository.findAll();
     }
 
     @GetMapping()
-    public Page<ContasPagarDTO> filtrarContasPagar(ContasPagarFilter contasPagarFilter, Pageable pageable) {
+    public Page<ContasPagarDTO> filterContasPagar(ContasPagarFilter contasPagarFilter, Pageable pageable) {
       return contasPagarRepository.filter(contasPagarFilter, pageable);
     }
 }

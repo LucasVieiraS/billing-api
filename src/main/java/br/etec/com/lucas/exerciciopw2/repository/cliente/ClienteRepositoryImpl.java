@@ -69,7 +69,7 @@ public class ClienteRepositoryImpl implements ClienteRepositoryQuery {
       predicates.add(
         builder.like(
           builder.lower(root.get("nome")),
-          "%" + clienteFilter.getNome().toLowerCase() + '%'
+          "%" + clienteFilter.getNome().toLowerCase() + "%"
         )
       );
     }
